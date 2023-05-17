@@ -11,21 +11,43 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if os.environ.get('DJANGO_ENV') == 'production':
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env.production'))
+elif os.environ.get('DJANGO_ENV') == 'development':
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env.development'))
+else:
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env.testing'))
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+DATABASES = {
+    'default': env.db('DATABASE_URL')
+}
+
+#for each environ shell command for windows
+#set DJANGO_ENV=development
+#set DJANGO_ENV=production
+#set DJANGO_ENV=testing pytest #specifically for using django-pytest
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w)53^cx#%7s-e4hy2f1vr@oxok^#ol$zn9*50ah607kspm4ef1'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -37,6 +59,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ecom_app',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -73,12 +97,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+'''
 
 
 # Password validation
@@ -121,3 +147,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
