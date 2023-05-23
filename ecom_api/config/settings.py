@@ -33,10 +33,10 @@ DATABASES = {
     'default': env.db('DATABASE_URL')
 }
 
-#for each environ shell command for windows
-#set DJANGO_ENV=development
-#set DJANGO_ENV=production
-#set DJANGO_ENV=testing pytest #specifically for using django-pytest
+# for each environ shell command for windows
+# set DJANGO_ENV=development
+# set DJANGO_ENV=production
+# set DJANGO_ENV=testing pytest #specifically for using django-pytest
 
 
 # Quick-start development settings - unsuitable for production
@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ecom_app',
-    'rest_framework'
+    'rest_framework',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -153,5 +154,10 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django Ecommerce API',
 }
