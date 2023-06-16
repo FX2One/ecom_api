@@ -37,6 +37,7 @@ DATABASES = {
 # set DJANGO_ENV=development
 # set DJANGO_ENV=production
 # set DJANGO_ENV=testing pytest #specifically for using django-pytest
+# coverage run -m pytest to generate coverage report then 'coverage html'
 
 
 # Quick-start development settings - unsuitable for production
