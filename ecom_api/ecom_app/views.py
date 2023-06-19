@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from .models import Category, Product, Brand
 from .serializers import CategorySerializer, ProductSerializer, BrandSerializer
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 
@@ -15,6 +16,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    @action(detail=False, methods=['get'], url_path=r"category/(?P<category>\w+)/all",url_name="all",)
+    def list_product_by_category(self, request, category=None):
+        queryset = self.get_queryset().filter(category__name=category)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class BrandViewSet(viewsets.ModelViewSet):
     queryset = Brand.objects.all()

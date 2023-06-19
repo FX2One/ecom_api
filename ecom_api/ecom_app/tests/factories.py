@@ -24,4 +24,5 @@ class ProductFactory(factory.django.DjangoModelFactory):
     digital = factory.Faker('boolean')
     brand = factory.SubFactory(BrandFactory)
     category = factory.SubFactory(CategoryFactory)
+    is_active = True
 

@@ -26,13 +26,18 @@ class Product(models.Model):
     digital = models.BooleanField(default=False, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = TreeForeignKey("Category", on_delete=models.SET_NULL, null=True, blank=True)
-
+    is_active = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=255)
 
     def __str__(self):
         return self.name
 
 class ProductLine(models.Model):
-    pass
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    sku = models.CharField(max_length=150)
+    stock_quantity = models.IntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
 
 class ProductImage(models.Model):
     pass
@@ -42,4 +47,5 @@ class Attribute(models.Model):
 
 class AttributeValue(models.Model):
     pass
+    
 
