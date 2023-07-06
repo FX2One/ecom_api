@@ -36,7 +36,7 @@ class ProductLine(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     sku = models.CharField(max_length=150)
     stock_quantity = models.IntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="productline")
     is_active = models.BooleanField(default=False)
 
 class ProductImage(models.Model):
