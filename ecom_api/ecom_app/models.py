@@ -1,5 +1,6 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from .managers import ProductManager
 
 class Category(MPTTModel):
     name = models.CharField(max_length=100)
@@ -28,6 +29,8 @@ class Product(models.Model):
     category = TreeForeignKey("Category", on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=255)
+
+    objects = ProductManager()
 
     def __str__(self):
         return self.name
